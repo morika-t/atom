@@ -221,6 +221,11 @@ class Project extends Model
   # Returns a promise that resolves to an {TextEditor}.
   open: (filePath, options={}) ->
     filePath = @resolve(filePath)
+
+    # Make sure we have permissions
+    fileDescriptor = fs.openSync(filePath, 'r+')
+    fs.closeSync(fileDescriptor)
+
     @bufferForPath(filePath).then (buffer) =>
       @buildEditorForBuffer(buffer, options)
 
